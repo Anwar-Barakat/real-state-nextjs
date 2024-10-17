@@ -1,5 +1,6 @@
 "use client";
 import { Button } from '@/components/ui/button';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,9 +9,9 @@ import React from 'react';
 
 const Header = () => {
   const path = usePathname(); // Get the current path
-
+  const { user, isSignedIn } = useUser(); // Get the current user
   return (
-    <header className='p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
+    <header className='p-6 px-10 flex justify-between shadow-sm top-0 w-full z-10 bg-white'>
       <div className='flex gap-10 items-center'>
         <Image src="/assets/logo.svg" alt="Company Logo" width={40} height={40} />
         <ul className='hidden md:flex gap-10'>
@@ -36,9 +37,12 @@ const Header = () => {
           <Plus className='h-5 w-5' />
           Post Your Ad
         </Button>
-        <Button variant="outline">
-          Login
-        </Button>
+        {
+          isSignedIn ? <UserButton /> : <Link href={`sign-in`}>
+            <Button variant="outline">Login</Button>
+          </Link>
+        }
+
       </div>
     </header>
   );
